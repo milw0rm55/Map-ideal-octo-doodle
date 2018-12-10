@@ -26,7 +26,7 @@ import android.content.Intent
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
-
+    private  val PLACE_PICKER_REQUEST = 1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
@@ -38,7 +38,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         val fab: View = findViewById(R.id.floattingbutton)
         fab.setOnClickListener {
-            val PLACE_PICKER_REQUEST = 1
             val builder = PlacePicker.IntentBuilder()
             startActivityForResult(builder.build(this), PLACE_PICKER_REQUEST)
         }
@@ -86,6 +85,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 val place = PlacePicker.getPlace(data!!, this)
                 val toastMsg = String.format("Place: %s", place.name)
                 Toast.makeText(this, toastMsg, Toast.LENGTH_LONG).show()
+                mMap.addMarker(MarkerOptions().position(place.latLng))
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(place.latLng))
             }
         }
     }
